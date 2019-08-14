@@ -20,7 +20,7 @@ struct Activity{
     init(id: String, routes: [CLLocationCoordinate2D]) {
         self.activityID = id
         self.routes = routes
-        
+        self.ref = nil
     }
     
     
