@@ -13,6 +13,7 @@ import Firebase
 
 struct User{
     
+    private static var dbRef: DatabaseReference = Database.database().reference()
     private var userID:String
     private var fullName:String
     private var activityID:String
@@ -29,13 +30,22 @@ struct User{
         self.key = key
     }
     
+    init(){
+        self.activityID = ""
+        self.userID = ""
+        self.fullName = ""
+        self.location = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
+        self.ref = nil
+        self.key = ""
+    }
+    
     init?(snapshot: DataSnapshot) {
         
         guard
             let value = snapshot.value as? [String: AnyObject],
             let userID = value["userID"] as? String,
             let fullName = value["fullName"] as? String,
-            let activityID = value["activityID"] as? String,
+            let activityID = value["activity"] as? String,
             let location = value["location"] as? String
         
             else {
@@ -64,5 +74,50 @@ struct User{
             "location": "\(location.latitude),\(location.longitude)"
             
         ]
+    }
+    
+    func insertData(callback: @escaping (String) -> Void) {
+        
+        User.dbRef.child("users").childByAutoId().setValue(self.toAnyObject()) { (error, databaseReference) in
+            
+            if error == nil{
+                callback("Operation Successful")
+            }else{
+                callback(error.debugDescription)
+            }
+            
+        }
+    }
+    
+    func deleteData(callback: (String) -> Void) {
+        
+        if ref != nil{
+            ref?.removeValue()
+            callback("Delete Successful")
+            
+        }else{
+            callback("Delete Failed")
+            
+        }
+        
+    }
+    
+    func searchUser(userID:String, callback: @escaping ([User]) -> Void){
+        
+        
+        User.dbRef.child("users").queryOrdered(byChild:  "userID").queryStarting(atValue: userID).queryEnding(atValue: userID + "\u{f8ff}").observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            var userList:[User] = []
+            for item in snapshot.children{
+                let user = item as! DataSnapshot
+                let cyclist = User(snapshot: user)
+                userList.append(cyclist!)
+            }
+            
+            callback(userList)
+            
+            
+        })
+        
     }
 }
