@@ -24,14 +24,14 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="65" translatesAutoresizingMaskIntoConstraints="NO" id="NvF-6u-LpH">
                                         <rect key="frame" x="0.0" y="0.0" width="214" height="30"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdz-1P-Ig1">
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdz-1P-Ig1">
                                                 <rect key="frame" x="0.0" y="0.0" width="114" height="30"/>
                                                 <state key="normal" title="Insert"/>
                                                 <connections>
                                                     <action selector="insertData:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KOc-z0-FQ0"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L3P-e7-N4T">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L3P-e7-N4T">
                                                 <rect key="frame" x="179" y="0.0" width="35" height="30"/>
                                                 <state key="normal" title="Read"/>
                                                 <connections>

@@ -1,14 +1,13 @@
 //
-//  User.swift
+//  Login.swift
 //  cycle
 //
 //  Created by boy setiawan on 14/08/19.
 //  Copyright © 2019 boy setiawan. All rights reserved.
 //
 
-
 import Foundation
-import MapKit
+
 import Firebase
 
 struct User{
@@ -37,7 +36,7 @@ struct User{
             let fullName = value["fullName"] as? String,
             let activityID = value["activityID"] as? String,
             let location = value["location"] as? String
-        
+            
             else {
                 return nil
         }
