@@ -115,21 +115,33 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kxs-bx-Bff">
                                 <rect key="frame" x="20" y="128" width="374" height="50"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1vk-jz-7Sj">
-                                        <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
-                                        <state key="normal" title="New Route"/>
-                                        <connections>
-                                            <action selector="search:" destination="WXY-Yh-m6F" eventType="touchUpInside" id="pgo-GQ-Nab"/>
-                                        </connections>
-                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="87" translatesAutoresizingMaskIntoConstraints="NO" id="QnF-N9-cCo">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1vk-jz-7Sj">
+                                                <rect key="frame" x="0.0" y="0.0" width="143.5" height="30"/>
+                                                <state key="normal" title="New Route"/>
+                                                <connections>
+                                                    <action selector="search:" destination="WXY-Yh-m6F" eventType="touchUpInside" id="pgo-GQ-Nab"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R7G-wK-W5k">
+                                                <rect key="frame" x="230.5" y="0.0" width="143.5" height="30"/>
+                                                <state key="normal" title="Activity"/>
+                                                <connections>
+                                                    <action selector="searchActivity:" destination="WXY-Yh-m6F" eventType="touchUpInside" id="Epb-LG-2pP"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="App-tg-jNR"/>
-                                    <constraint firstItem="1vk-jz-7Sj" firstAttribute="top" secondItem="kxs-bx-Bff" secondAttribute="top" id="T2c-ti-gL0"/>
-                                    <constraint firstItem="1vk-jz-7Sj" firstAttribute="leading" secondItem="kxs-bx-Bff" secondAttribute="leading" id="hFR-Zu-ACy"/>
+                                    <constraint firstItem="QnF-N9-cCo" firstAttribute="leading" secondItem="kxs-bx-Bff" secondAttribute="leading" id="IYD-xR-3iC"/>
+                                    <constraint firstAttribute="trailing" secondItem="QnF-N9-cCo" secondAttribute="trailing" id="dfL-ab-8tt"/>
                                     <constraint firstAttribute="height" constant="50" id="nr2-f5-6cJ"/>
-                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1vk-jz-7Sj" secondAttribute="trailing" constant="20" symbolic="YES" id="ySn-g2-65h"/>
+                                    <constraint firstItem="QnF-N9-cCo" firstAttribute="top" secondItem="kxs-bx-Bff" secondAttribute="top" id="oqc-bS-kEm"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -148,6 +160,7 @@
                     <navigationItem key="navigationItem" id="i0Q-yB-BkZ"/>
                     <connections>
                         <outlet property="mapView" destination="uHu-lx-uhs" id="Gi8-kc-bMc"/>
+                        <outlet property="searchActivity" destination="R7G-wK-W5k" id="TTS-za-epu"/>
                         <outlet property="searchRoute" destination="1vk-jz-7Sj" id="6Wt-WA-AeH"/>
                     </connections>
                 </viewController>
@@ -198,6 +211,50 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BLb-e1-orr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2968.115942028986" y="-65.625"/>
+        </scene>
+        <!--Search Activity View Controller-->
+        <scene sceneID="BMg-F8-Zes">
+            <objects>
+                <tableViewController storyboardIdentifier="ActivitySearchTable" id="64L-di-FMI" customClass="SearchActivityViewController" customModule="cycle" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mNx-C0-UkJ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="VHS-3x-bPB" detailTextLabel="eFX-EC-7fk" style="IBUITableViewCellStyleSubtitle" id="6bd-gS-FKx">
+                                <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6bd-gS-FKx" id="c1d-cA-4o0">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VHS-3x-bPB">
+                                            <rect key="frame" x="20" y="5" width="33.5" height="20.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eFX-EC-7fk">
+                                            <rect key="frame" x="20" y="25.5" width="44" height="14.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="64L-di-FMI" id="q66-sU-MHV"/>
+                            <outlet property="delegate" destination="64L-di-FMI" id="Cj8-KG-d8i"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="f3v-z2-0vB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2968" y="607"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="m6r-As-bMj">

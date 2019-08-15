@@ -13,8 +13,8 @@ import Firebase
 struct Activity{
     
     private static var dbRef: DatabaseReference = Database.database().reference()
-    private var activityID:String
-    private var routes:[CLLocationCoordinate2D] = []
+    var activityID:String
+    var routes:[CLLocationCoordinate2D] = []
     let ref: DatabaseReference?
     private var key: String
     

@@ -17,8 +17,10 @@ class MapViewController: UIViewController {
     var initialLocation:CLLocationCoordinate2D!
     var routesPoints:[MKPlacemark] = []
     var isSearchRouteClicked = false
+    var isSearchActivityClicked = false
    
     
+    @IBOutlet weak var searchActivity: UIButton!
     @IBOutlet weak var searchRoute: UIButton!
     @IBOutlet weak var mapView: MKMapView!
     override func viewDidLoad() {
@@ -58,7 +60,7 @@ class MapViewController: UIViewController {
             for route in self.routesPoints{
                 routesShared.append(route.coordinate)
             }
-            let activityName = "\(name!)\(Int.random(in: 1...10000))"
+            let activityName = "\(name!.uppercased())\(Int.random(in: 1...10000))"
             let activity = Activity(id: activityName.trimmingCharacters(in: .whitespacesAndNewlines), routes: routesShared)
             
             activity.insertData { (info) in
@@ -68,12 +70,6 @@ class MapViewController: UIViewController {
             }
             
         }
-        
-        //        //the cancel action doing nothing
-        //        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
-        //
-        //
-        //        }
         
         //adding textfields to our dialog box
         alertController.addTextField { (textField) in
@@ -88,6 +84,40 @@ class MapViewController: UIViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    @IBAction func searchActivity(_ sender: UIButton) {
+        
+        if isSearchActivityClicked{
+            
+            isSearchActivityClicked = false
+            self.searchActivity.setTitle("Activity", for: .normal)
+            
+            let alert = UIAlertController(title: "Start Activity",message: "Let's Go",preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true, completion: nil)
+            
+            navigationItem.titleView = nil
+            
+        }else{
+            let activitySearchTable = storyboard!.instantiateViewController(withIdentifier: "ActivitySearchTable") as! SearchActivityViewController
+            resultSearchController = UISearchController(searchResultsController: activitySearchTable)
+            resultSearchController?.searchResultsUpdater = activitySearchTable
+            resultSearchController?.searchBar.delegate = activitySearchTable
+            
+            let searchBar = resultSearchController!.searchBar
+            searchBar.sizeToFit()
+            searchBar.placeholder = "Search for activities"
+            navigationItem.titleView = resultSearchController?.searchBar
+            
+            resultSearchController?.hidesNavigationBarDuringPresentation = false
+            resultSearchController?.dimsBackgroundDuringPresentation = true
+            definesPresentationContext = true
+            self.searchActivity.setTitle("Start Route", for: .normal)
+            isSearchActivityClicked = true
+            activitySearchTable.handleActivitySearchDelegate = self
+            cancelRoutes()
+        }
+        
+    }
     @IBAction func search(_ sender: UIButton) {
         
         if isSearchRouteClicked{
@@ -97,7 +127,6 @@ class MapViewController: UIViewController {
             
             showInputDialog()
             navigationItem.titleView = nil
-            
             
         }else{
             let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "LocationSearchTable") as! SearchRouteViewController
@@ -181,16 +210,6 @@ extension MapViewController: HandleMapSearch {
     func dropPinZoomIn(placemark:MKPlacemark){
         // cache the pin
         selectedPin = placemark
-        // clear existing pins
-        //mapView.removeAnnotations(mapView.annotations)
-//        let annotation = MKPointAnnotation()
-//        annotation.coordinate = placemark.coordinate
-//        annotation.title = placemark.name
-//        if let city = placemark.locality,
-//            let state = placemark.administrativeArea {
-//            annotation.subtitle = "(city) (state)"
-//        }
-//        mapView.addAnnotation(annotation)
         
         addPinInMap(placemark: placemark)
         
@@ -243,6 +262,27 @@ extension MapViewController: HandleMapSearch {
     }
 }
 
+extension MapViewController:HandleActivitySearch{
+    func dropActivity(activity: Activity) {
+        
+        self.routesPoints = []
+        for point in activity.routes{
+            let placemark = MKPlacemark(coordinate: point)
+            routesPoints.append(placemark)
+            addPinInMap(placemark: placemark)
+        }
+        drawRoutes()
+    }
+    
+    func cancelActivity() {
+        navigationItem.titleView = nil
+        isSearchActivityClicked = false
+        self.searchActivity.setTitle("Activity", for: .normal)
+        cancelRoutes()
+        
+    }
+    
+}
 
 extension MapViewController: MKMapViewDelegate{
     
