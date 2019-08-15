@@ -21,12 +21,12 @@ struct Login{
         }
     }
     
-    static func loginAccount(email:String, password:String, callback: @escaping (String) -> Void){
+    static func loginAccount(email:String, password:String, callback: @escaping (String,Bool) -> Void){
         Auth.auth().signIn(withEmail: email, password: password) { user, error in
             if let error = error, user == nil {
-                callback(error.localizedDescription)
+                callback(error.localizedDescription,false)
             }else{
-                callback("Welcome")
+                callback("Welcome",true)
             }
         }
     }
