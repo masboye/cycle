@@ -11,12 +11,12 @@ import Firebase
 
 struct Login{
     
-    static func createAccount(email:String, password:String, callback: @escaping (String) -> Void){
+    static func createAccount(email:String, password:String, callback: @escaping (String,Bool) -> Void){
         Auth.auth().createUser(withEmail: email, password: password) { user, error in
             if error == nil {
-                callback("Create User Success")
+                callback("Create User Success",true)
             }else{
-                callback(error!.localizedDescription)
+                callback(error!.localizedDescription,false)
             }
         }
     }

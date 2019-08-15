@@ -51,6 +51,7 @@
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4gG-oR-5Np">
                                                 <rect key="frame" x="82" y="0.0" width="292" height="30"/>
                                                 <nil key="textColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                             </textField>
                                         </subviews>
@@ -94,7 +95,7 @@
                     <connections>
                         <outlet property="textBoxPassword" destination="4gG-oR-5Np" id="OsW-Lq-yqE"/>
                         <outlet property="textBoxUserID" destination="KT3-YD-tkd" id="fdo-zA-gBF"/>
-                        <segue destination="WXY-Yh-m6F" kind="show" identifier="showMap" id="5zs-YT-aAE"/>
+                        <segue destination="glg-eG-wNc" kind="show" identifier="showMap" id="5zs-YT-aAE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -109,10 +110,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="uHu-lx-uhs">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kxs-bx-Bff">
-                                <rect key="frame" x="20" y="84" width="374" height="778"/>
+                                <rect key="frame" x="20" y="128" width="374" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1vk-jz-7Sj">
                                         <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
@@ -124,24 +125,27 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="App-tg-jNR"/>
                                     <constraint firstItem="1vk-jz-7Sj" firstAttribute="top" secondItem="kxs-bx-Bff" secondAttribute="top" id="T2c-ti-gL0"/>
                                     <constraint firstItem="1vk-jz-7Sj" firstAttribute="leading" secondItem="kxs-bx-Bff" secondAttribute="leading" id="hFR-Zu-ACy"/>
+                                    <constraint firstAttribute="height" constant="50" id="nr2-f5-6cJ"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1vk-jz-7Sj" secondAttribute="trailing" constant="20" symbolic="YES" id="ySn-g2-65h"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="uHu-lx-uhs" firstAttribute="top" secondItem="Mwk-co-vS5" secondAttribute="top" id="Dcl-Jl-k5w"/>
-                            <constraint firstItem="Mwk-co-vS5" firstAttribute="bottom" secondItem="kxs-bx-Bff" secondAttribute="bottom" id="JHs-hf-Aoe"/>
-                            <constraint firstItem="kxs-bx-Bff" firstAttribute="top" secondItem="Mwk-co-vS5" secondAttribute="top" constant="40" id="L1K-kR-M7M"/>
                             <constraint firstItem="Mwk-co-vS5" firstAttribute="trailing" secondItem="uHu-lx-uhs" secondAttribute="trailing" id="NK9-uH-4YV"/>
                             <constraint firstItem="kxs-bx-Bff" firstAttribute="leading" secondItem="Mwk-co-vS5" secondAttribute="leading" constant="20" id="YyC-BA-ihL"/>
                             <constraint firstItem="Mwk-co-vS5" firstAttribute="trailing" secondItem="kxs-bx-Bff" secondAttribute="trailing" constant="20" id="heA-FL-9Pl"/>
                             <constraint firstItem="Mwk-co-vS5" firstAttribute="bottom" secondItem="uHu-lx-uhs" secondAttribute="bottom" id="rTT-Z3-4gr"/>
+                            <constraint firstItem="kxs-bx-Bff" firstAttribute="top" secondItem="Mwk-co-vS5" secondAttribute="top" constant="40" id="uWw-QG-WNR"/>
                             <constraint firstItem="uHu-lx-uhs" firstAttribute="leading" secondItem="Mwk-co-vS5" secondAttribute="leading" id="x5M-iI-gBp"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Mwk-co-vS5"/>
                     </view>
+                    <navigationItem key="navigationItem" id="i0Q-yB-BkZ"/>
                     <connections>
                         <outlet property="mapView" destination="uHu-lx-uhs" id="Gi8-kc-bMc"/>
                         <outlet property="searchRoute" destination="1vk-jz-7Sj" id="6Wt-WA-AeH"/>
@@ -149,7 +153,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dbs-sI-YZy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="912" y="92"/>
+            <point key="canvasLocation" x="1821.7391304347827" y="91.741071428571431"/>
         </scene>
         <!--Search Route View Controller-->
         <scene sceneID="Zhi-b4-JD5">
@@ -193,7 +197,25 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BLb-e1-orr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2058" y="-65"/>
+            <point key="canvasLocation" x="2968.115942028986" y="-65.625"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="m6r-As-bMj">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="glg-eG-wNc" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Pu5-ey-4ZV">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="WXY-Yh-m6F" kind="relationship" relationship="rootViewController" id="EOf-zx-QYS"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="h91-HQ-nUu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="911.59420289855075" y="91.741071428571431"/>
         </scene>
     </scenes>
 </document>
