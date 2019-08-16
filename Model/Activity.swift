@@ -15,9 +15,9 @@ struct Activity{
     private static var dbRef: DatabaseReference = Database.database().reference()
     var activityID:String
     var routes:[CLLocationCoordinate2D] = []
-    private var messageID = 0
-    private var message:String
-    private var userID:String
+    var messageID = 0
+    var message:String
+    var userID:String
     let ref: DatabaseReference?
     private var key: String
     

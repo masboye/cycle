@@ -16,7 +16,15 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        let defaults = UserDefaults.standard
+        let userID = defaults.string(forKey: "email")
         
+        let user = User()
+        
+        user.searchUser(userID: userID ?? "") { (users) in
+            //already sign in
+            self.performSegue(withIdentifier: "showMap", sender: nil )
+        }
     }
 
     @IBAction func signIn(_ sender: UIButton) {
@@ -76,22 +84,22 @@ class ViewController: UIViewController {
         
 //        let defaults = UserDefaults.standard
 //        defaults.set("boye.setiawan@gmail.com", forKey: "email")
-        self.performSegue(withIdentifier: "showMap", sender: nil )
+//        self.performSegue(withIdentifier: "showMap", sender: nil )
         
-//        Login.loginAccount(email: textBoxUserID.text!.trimmingCharacters(in: .whitespacesAndNewlines), password: textBoxPassword.text!.trimmingCharacters(in: .whitespacesAndNewlines)) { (info,result) in
-//
-//            if result{
-//                let defaults = UserDefaults.standard
-//                defaults.set(self.textBoxUserID.text!.trimmingCharacters(in: .whitespacesAndNewlines), forKey: "email")
-//                self.performSegue(withIdentifier: "showMap", sender: nil )
-//            }else{
-//                let alert = UIAlertController(title: "Login",message: info,preferredStyle: .alert)
-//                alert.addAction(UIAlertAction(title: "OK", style: .default))
-//                self.present(alert, animated: true, completion: nil)
-//            }
-//
-//
-//        }
+        Login.loginAccount(email: textBoxUserID.text!.trimmingCharacters(in: .whitespacesAndNewlines), password: textBoxPassword.text!.trimmingCharacters(in: .whitespacesAndNewlines)) { (info,result) in
+
+            if result{
+                let defaults = UserDefaults.standard
+                defaults.set(self.textBoxUserID.text!.trimmingCharacters(in: .whitespacesAndNewlines), forKey: "email")
+                self.performSegue(withIdentifier: "showMap", sender: nil )
+            }else{
+                let alert = UIAlertController(title: "Login",message: info,preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true, completion: nil)
+            }
+
+
+        }
     }
     
 }

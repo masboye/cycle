@@ -19,6 +19,7 @@
 		EFEE5DDA2301575B0027F401 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFEE5DD82301575B0027F401 /* Main.storyboard */; };
 		EFEE5DDC2301575C0027F401 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFEE5DDB2301575C0027F401 /* Assets.xcassets */; };
 		EFEE5DDF2301575C0027F401 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFEE5DDD2301575C0027F401 /* LaunchScreen.storyboard */; };
+		EFF1265223068EAD0059A4BE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EFF1265123068EAD0059A4BE /* GoogleService-Info.plist */; };
 		EFF5FE322303FA9500F42319 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF5FE312303FA9500F42319 /* User.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 		EFEE5DDB2301575C0027F401 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EFEE5DDE2301575C0027F401 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EFEE5DE02301575C0027F401 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EFF1265123068EAD0059A4BE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EFF5FE312303FA9500F42319 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,6 +132,7 @@
 				EFEE5DD82301575B0027F401 /* Main.storyboard */,
 				EFEE5DDB2301575C0027F401 /* Assets.xcassets */,
 				EFEE5DDD2301575C0027F401 /* LaunchScreen.storyboard */,
+				EFF1265123068EAD0059A4BE /* GoogleService-Info.plist */,
 				EFEE5DE02301575C0027F401 /* Info.plist */,
 			);
 			path = cycle;
@@ -201,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFEE5DDF2301575C0027F401 /* LaunchScreen.storyboard in Resources */,
+				EFF1265223068EAD0059A4BE /* GoogleService-Info.plist in Resources */,
 				EFEE5DDC2301575C0027F401 /* Assets.xcassets in Resources */,
 				EFEE5DDA2301575B0027F401 /* Main.storyboard in Resources */,
 			);

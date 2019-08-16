@@ -22,16 +22,26 @@ struct Pretiffy {
         
     }
     
+    static func getAltitude(height:Double) -> String {
+        
+        let lengthFormatter = LengthFormatter()
+        return "\(lengthFormatter.string(fromValue:height, unit: .meter))"
+        
+    }
+    
     static func getSpeed(speed:Double) -> String {
         
         let lengthFormatter = LengthFormatter()
-        
+//        lengthFormatter.numberFormatter.roundingMode = .ceiling
+//        lengthFormatter.numberFormatter.maximumFractionDigits = 2
+//        
         if speed < 0{
             return "0"
         }
-        let calculatedSpeed = speed * 3600
         
-        return "\(lengthFormatter.string(fromValue:calculatedSpeed, unit: .kilometer))/H"
+        let calculatedSpeed = speed * 3600
+        //print("speed \(speed) - calculated \(calculatedSpeed) ")
+        return "\(lengthFormatter.string(fromValue:calculatedSpeed, unit: .kilometer))/hour"
        
     }
 }

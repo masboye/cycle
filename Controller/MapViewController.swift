@@ -8,16 +8,11 @@
 
 import UIKit
 import MapKit
+import CoreMotion
 
 class MapViewController: UIViewController {
     
-    @IBAction func getBug(_ sender: UIButton) {
-        let coordinate0 = CLLocation(latitude: initialLocation.latitude, longitude: initialLocation.longitude)
-        let finalDestination = routesPoints.last!
-        let coordinate1 = finalDestination.location
-        let distanceInMeters = coordinate0.distance(from: coordinate1!)
-        print(distanceInMeters)
-    }
+    
     var resultSearchController:UISearchController? = nil
     var selectedPin:MKPlacemark? = nil
     let locationManager = CLLocationManager()
@@ -29,15 +24,25 @@ class MapViewController: UIViewController {
     var activityID:String?
     var isActivityOwner = false
     var distanceFromDestination = 0.0
+    var messageID = 0
+    
+    let altiMeter = CMAltimeter()
+    private var timerForBackground:Timer?
    
-    func showMenu(status:Bool){
+    @IBOutlet weak var viewInfo: UIView!
+    @IBOutlet weak var speedLabel: UILabel!
+    @IBOutlet weak var altitudeLabel: UILabel!
+    
+    func notShowMenu(status:Bool){
         self.searchRoute.isHidden = status
         self.searchActivity.isHidden = status
+        
     }
     
-    func showCycling(status:Bool){
+    func notShowCycling(status:Bool){
         self.finishButton.isHidden = status
         self.sosButton.isHidden = status
+        
     }
     
     func showInputDialogActivityShare() {
@@ -77,13 +82,15 @@ class MapViewController: UIViewController {
     
     @IBAction func finish(_ sender: UIButton) {
         
-        showMenu(status: false)
-        showCycling(status: true)
+        notShowMenu(status: false)
+        notShowCycling(status: true)
         
         if isActivityOwner{
             showInputDialogActivityShare()
         }
+        
     }
+    
     @IBOutlet weak var finishButton: UIButton!
     @IBOutlet weak var menuView: UIView!
     @IBOutlet weak var sosButton: UIButton!
@@ -148,9 +155,10 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locationManager.requestWhenInUseAuthorization()
-        locationManager.requestLocation()
+        //locationManager.requestLocation()
+        locationManager.startUpdatingLocation()
         
         //show user location
         mapView.showsUserLocation = true
@@ -166,8 +174,69 @@ class MapViewController: UIViewController {
         
         let defaults = UserDefaults.standard
         self.userID = defaults.string(forKey: "email")
+        
+        //set altimeter
+        if CMAltimeter.isRelativeAltitudeAvailable(){
+            
+            altiMeter.startRelativeAltitudeUpdates(to: OperationQueue.current!) { (altiData, error) in
+                if let data = altiData{
+                    
+                    self.altitudeLabel.text = Pretiffy.getAltitude(height: Double(data.relativeAltitude))
+                    
+                }
+            }
+            
+        }
+        
+        
     }
     
+    func showSOSMessage(activity:Activity) {
+        //Creating UIAlertController and
+        //Setting title and message for the alert dialog
+        let info = "\(activity.userID) send message '\(activity.message)'"
+        let alertController = UIAlertController(title: "SOS", message: info, preferredStyle: .alert)
+        
+        //the confirm action taking the inputs
+        let confirmAction = UIAlertAction(title: "Show Location", style: .default) { (_) in
+            
+        }
+        
+        //        //the cancel action doing nothing
+        let cancelAction = UIAlertAction(title: "Acknowledge", style: .cancel) { (_) in
+            
+            self.messageID = activity.messageID
+            
+        }
+        
+        //adding the action to dialogbox
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+        
+        //finally presenting the dialog box
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    
+    func backgroundOperation(){
+        
+        //background operation
+        self.timerForBackground = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { (time) in
+            
+            let kegiatan = Activity()
+            
+            kegiatan.searchActivity(activityID: self.activityID ?? "") { (activities) in
+                
+                for activity in activities{
+                    if activity.messageID != 0 && activity.messageID != self.messageID && self.userID != activity.userID {
+                        //new sos message
+                        self.showSOSMessage(activity: activity)
+                        
+                    }
+                }
+            }
+        }
+    }
     func showInputDialog() {
         
         //Creating UIAlertController and
@@ -236,8 +305,12 @@ class MapViewController: UIViewController {
             navigationItem.titleView = nil
             self.navigationItem.prompt = self.activityID
             
-            showMenu(status: true)
-            showCycling(status: false)
+            notShowMenu(status: true)
+            notShowCycling(status: false)
+            
+            backgroundOperation()
+            guard let timer = self.timerForBackground else {return}
+            timer.fire()
             
         }else{
             let activitySearchTable = storyboard!.instantiateViewController(withIdentifier: "ActivitySearchTable") as! SearchActivityViewController
@@ -274,11 +347,14 @@ class MapViewController: UIViewController {
             //set owner of activity
             isActivityOwner = true
             
-            showMenu(status: true)
-            showCycling(status: false)
+            notShowMenu(status: true)
+            notShowCycling(status: false)
             
             navigationItem.titleView = nil
             
+            backgroundOperation()
+            guard let timer = self.timerForBackground else {return}
+            timer.fire()
             
         }else{
             let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "LocationSearchTable") as! SearchRouteViewController
@@ -325,7 +401,8 @@ extension MapViewController : CLLocationManagerDelegate {
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
             mapView.setRegion(region, animated: true)
             self.initialLocation = location.coordinate
-            print("location.speed = \(Pretiffy.getSpeed(speed: location.speed))")
+            //print("location.speed = \(Pretiffy.getSpeed(speed: location.speed))")
+            self.speedLabel.text = Pretiffy.getSpeed(speed: location.speed)
         }
     }
     
@@ -348,6 +425,9 @@ extension MapViewController: HandleMapSearch {
         self.navigationItem.prompt = nil
         self.isActivityOwner = false
         
+        guard let timer = self.timerForBackground else {return}
+        timer.invalidate()
+
     }
     
     func addPinInMap(placemark:MKPlacemark){
