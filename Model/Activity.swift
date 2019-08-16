@@ -15,6 +15,8 @@ struct Activity{
     private static var dbRef: DatabaseReference = Database.database().reference()
     var activityID:String
     var routes:[CLLocationCoordinate2D] = []
+    private var messageID = 0
+    private var message:String
     let ref: DatabaseReference?
     private var key: String
     
@@ -23,6 +25,7 @@ struct Activity{
         self.routes = routes
         self.ref = nil
         self.key = key
+        self.message = ""
         
     }
     
@@ -31,14 +34,18 @@ struct Activity{
         self.routes = []
         self.ref = nil
         self.key = ""
+        self.message = ""
     }
     
     init?(snapshot: DataSnapshot) {
         
+        print(snapshot)
         guard
             let value = snapshot.value as? [String: AnyObject],
             let activityID = value["activityID"] as? String,
-            let routes = value["routes"] as? [String]
+            let routes = value["routes"] as? [String],
+            let messageID = value["messageID"] as? Int?,
+            let message = value["message"] as? String
             else {
                 return nil
             }
@@ -46,6 +53,8 @@ struct Activity{
         self.ref = snapshot.ref
         self.key = snapshot.key
         self.activityID = activityID
+        self.message = message
+        self.messageID = messageID ?? 0
         
         var routesList :[CLLocationCoordinate2D] = []
         routes.forEach { (route) in
@@ -68,7 +77,9 @@ struct Activity{
         
         return [
             "activityID": activityID,
-            "routes": routesList
+            "routes": routesList,
+            "messageID": messageID,
+            "message": message
             
         ]
     }
@@ -108,8 +119,8 @@ struct Activity{
             for item in snapshot.children{
                 let activity = item as! DataSnapshot
                 
-                let activityCyclist = Activity(snapshot: activity)
-                activityList.append(activityCyclist!)
+                guard let activityCyclist = Activity(snapshot: activity) else {return}
+                activityList.append(activityCyclist)
             }
             
             callback(activityList)

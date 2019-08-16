@@ -74,20 +74,24 @@ class ViewController: UIViewController {
     }
     @IBAction func login(_ sender: UIButton) {
         
-        self.performSegue(withIdentifier: "showMap", sender: nil )
+//        let defaults = UserDefaults.standard
+//        defaults.set("boye.setiawan@gmail.com", forKey: "email")
+//        self.performSegue(withIdentifier: "showMap", sender: nil )
         
-//        Login.loginAccount(email: textBoxUserID.text!.trimmingCharacters(in: .whitespacesAndNewlines), password: textBoxPassword.text!.trimmingCharacters(in: .whitespacesAndNewlines)) { (info,result) in
-//
-//            if result{
-//                self.performSegue(withIdentifier: "showMap", sender: nil )
-//            }else{
-//                let alert = UIAlertController(title: "Login",message: info,preferredStyle: .alert)
-//                alert.addAction(UIAlertAction(title: "OK", style: .default))
-//                self.present(alert, animated: true, completion: nil)
-//            }
-//
-//
-//        }
+        Login.loginAccount(email: textBoxUserID.text!.trimmingCharacters(in: .whitespacesAndNewlines), password: textBoxPassword.text!.trimmingCharacters(in: .whitespacesAndNewlines)) { (info,result) in
+
+            if result{
+                let defaults = UserDefaults.standard
+                defaults.set(self.textBoxUserID.text!.trimmingCharacters(in: .whitespacesAndNewlines), forKey: "email")
+                self.performSegue(withIdentifier: "showMap", sender: nil )
+            }else{
+                let alert = UIAlertController(title: "Login",message: info,preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true, completion: nil)
+            }
+
+
+        }
     }
     
 }

@@ -18,7 +18,10 @@ class MapViewController: UIViewController {
     var routesPoints:[MKPlacemark] = []
     var isSearchRouteClicked = false
     var isSearchActivityClicked = false
+    var userID:String?
+    var activityID:String?
    
+    @IBOutlet weak var menuView: UIView!
     
     @IBOutlet weak var searchActivity: UIButton!
     @IBOutlet weak var searchRoute: UIButton!
@@ -42,6 +45,9 @@ class MapViewController: UIViewController {
         selectLocationTap.delaysTouchesBegan = true
         selectLocationTap.delegate = self
         self.mapView.addGestureRecognizer(selectLocationTap)
+        
+        let defaults = UserDefaults.standard
+        self.userID = defaults.string(forKey: "email")
     }
     
     func showInputDialog() {
@@ -60,13 +66,26 @@ class MapViewController: UIViewController {
             for route in self.routesPoints{
                 routesShared.append(route.coordinate)
             }
-            let activityName = "\(name!.uppercased())\(Int.random(in: 1...10000))"
-            let activity = Activity(id: activityName.trimmingCharacters(in: .whitespacesAndNewlines), routes: routesShared)
+            self.activityID = "\(name!.uppercased())\(Int.random(in: 1...10000))"
+            
+            self.navigationItem.prompt = self.activityID ?? "tes"
+            
+            let activity = Activity(id: self.activityID!.trimmingCharacters(in: .whitespacesAndNewlines), routes: routesShared)
             
             activity.insertData { (info) in
                 let alert = UIAlertController(title: "Routes",message: info,preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default))
                 self.present(alert, animated: true, completion: nil)
+                
+                //join the user in the activity
+                var user = User()
+                
+                user.searchUser(userID: self.userID ?? "") { (users) in
+                    
+                    for cyclist in users{
+                        cyclist.ref?.updateChildValues(["activity" : self.activityID])
+                    }
+                }
             }
             
         }
@@ -96,6 +115,7 @@ class MapViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
             
             navigationItem.titleView = nil
+            self.navigationItem.prompt = self.activityID
             
         }else{
             let activitySearchTable = storyboard!.instantiateViewController(withIdentifier: "ActivitySearchTable") as! SearchActivityViewController
@@ -125,8 +145,12 @@ class MapViewController: UIViewController {
             isSearchRouteClicked = false
             self.searchRoute.setTitle("New Route", for: .normal)
             
-            showInputDialog()
+            if self.routesPoints.count > 0{
+                showInputDialog()
+            }
+            
             navigationItem.titleView = nil
+            
             
         }else{
             let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "LocationSearchTable") as! SearchRouteViewController
@@ -191,6 +215,8 @@ extension MapViewController: HandleMapSearch {
         mapView.setRegion(region, animated: true)
         
         mapView.removeAnnotations(mapView.annotations)
+        
+        self.navigationItem.prompt = nil
         
         
     }
