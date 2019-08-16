@@ -11,6 +11,13 @@ import MapKit
 
 class MapViewController: UIViewController {
     
+    @IBAction func getBug(_ sender: UIButton) {
+        let coordinate0 = CLLocation(latitude: initialLocation.latitude, longitude: initialLocation.longitude)
+        let finalDestination = routesPoints.last!
+        let coordinate1 = finalDestination.location
+        let distanceInMeters = coordinate0.distance(from: coordinate1!)
+        print(distanceInMeters)
+    }
     var resultSearchController:UISearchController? = nil
     var selectedPin:MKPlacemark? = nil
     let locationManager = CLLocationManager()
@@ -20,12 +27,123 @@ class MapViewController: UIViewController {
     var isSearchActivityClicked = false
     var userID:String?
     var activityID:String?
+    var isActivityOwner = false
+    var distanceFromDestination = 0.0
    
-    @IBOutlet weak var menuView: UIView!
+    func showMenu(status:Bool){
+        self.searchRoute.isHidden = status
+        self.searchActivity.isHidden = status
+    }
     
+    func showCycling(status:Bool){
+        self.finishButton.isHidden = status
+        self.sosButton.isHidden = status
+    }
+    
+    func showInputDialogActivityShare() {
+        //Creating UIAlertController and
+        //Setting title and message for the alert dialog
+        let alertController = UIAlertController(title: "Share Activity", message: "What do you want to do with this route ?", preferredStyle: .alert)
+        
+        //the confirm action taking the inputs
+        let confirmAction = UIAlertAction(title: "Delete", style: .default) { (_) in
+            
+            let kegiatan = Activity()
+            
+            kegiatan.searchActivity(activityID: self.activityID ?? "") { (activities) in
+                
+                for activity in activities{
+                    activity.deleteData(callback: { (info) in
+                        print(info)
+                    })
+                }
+            }
+        }
+        
+        //the confirm action taking the inputs
+        let shareAction = UIAlertAction(title: "Share routes", style: .default) { (_) in
+            
+            //do nothing
+            
+        }
+        
+        //adding the action to dialogbox
+        alertController.addAction(confirmAction)
+        alertController.addAction(shareAction)
+        
+        //finally presenting the dialog box
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    @IBAction func finish(_ sender: UIButton) {
+        
+        showMenu(status: false)
+        showCycling(status: true)
+        
+        if isActivityOwner{
+            showInputDialogActivityShare()
+        }
+    }
+    @IBOutlet weak var finishButton: UIButton!
+    @IBOutlet weak var menuView: UIView!
+    @IBOutlet weak var sosButton: UIButton!
+    
+    
+    @IBAction func sos(_ sender: UIButton) {
+        
+        showSOSDialog()
+    }
+    
+    func showSOSDialog() {
+        //Creating UIAlertController and
+        //Setting title and message for the alert dialog
+        let alertController = UIAlertController(title: "SOS", message: "Message", preferredStyle: .alert)
+        
+        //the confirm action taking the inputs
+        let confirmAction = UIAlertAction(title: "Submit", style: .default) { (_) in
+            
+            //getting the input values from user
+            let message = alertController.textFields?[0].text
+            
+            let kegiatan = Activity()
+            
+            let messageID = Int.random(in: 1...10000)
+            
+            kegiatan.searchActivity(activityID: self.activityID ?? "") { (activities) in
+                
+                for activity in activities{
+                    //update values
+                    activity.ref?.updateChildValues(["message" : message?.trimmingCharacters(in: .whitespacesAndNewlines),"user": self.userID,"messageID":messageID])
+                
+                }
+            }
+            
+        }
+        
+        //        //the cancel action doing nothing
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+        
+        
+                }
+        
+        //adding textfields to our dialog box
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Message"
+        }
+        
+        //adding the action to dialogbox
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+        
+        //finally presenting the dialog box
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    @IBOutlet weak var menuWhenCycling: UIView!
     @IBOutlet weak var searchActivity: UIButton!
     @IBOutlet weak var searchRoute: UIButton!
     @IBOutlet weak var mapView: MKMapView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -51,6 +169,7 @@ class MapViewController: UIViewController {
     }
     
     func showInputDialog() {
+        
         //Creating UIAlertController and
         //Setting title and message for the alert dialog
         let alertController = UIAlertController(title: "Enter Activity Name", message: "Enter activity name", preferredStyle: .alert)
@@ -117,6 +236,9 @@ class MapViewController: UIViewController {
             navigationItem.titleView = nil
             self.navigationItem.prompt = self.activityID
             
+            showMenu(status: true)
+            showCycling(status: false)
+            
         }else{
             let activitySearchTable = storyboard!.instantiateViewController(withIdentifier: "ActivitySearchTable") as! SearchActivityViewController
             resultSearchController = UISearchController(searchResultsController: activitySearchTable)
@@ -146,8 +268,14 @@ class MapViewController: UIViewController {
             self.searchRoute.setTitle("New Route", for: .normal)
             
             if self.routesPoints.count > 0{
+                
                 showInputDialog()
             }
+            //set owner of activity
+            isActivityOwner = true
+            
+            showMenu(status: true)
+            showCycling(status: false)
             
             navigationItem.titleView = nil
             
@@ -197,6 +325,7 @@ extension MapViewController : CLLocationManagerDelegate {
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
             mapView.setRegion(region, animated: true)
             self.initialLocation = location.coordinate
+            print("location.speed = \(Pretiffy.getSpeed(speed: location.speed))")
         }
     }
     
@@ -217,7 +346,7 @@ extension MapViewController: HandleMapSearch {
         mapView.removeAnnotations(mapView.annotations)
         
         self.navigationItem.prompt = nil
-        
+        self.isActivityOwner = false
         
     }
     
@@ -258,7 +387,7 @@ extension MapViewController: HandleMapSearch {
             
             directionRequest.source = source
             directionRequest.destination = MKMapItem(placemark: point)
-            directionRequest.transportType = .automobile
+            directionRequest.transportType = .walking
             
             let directions = MKDirections(request: directionRequest)
             directions.calculate { (response, error) in
@@ -271,6 +400,10 @@ extension MapViewController: HandleMapSearch {
             
             //get route and assign to our route variable
             let route = directionResonse.routes[0]
+                
+                //test
+                print("route.distance = \(Pretiffy.getDistance(distance: route.distance))")
+                //end
             
             //add rout to our mapview
             self.mapView.addOverlay(route.polyline, level: .aboveRoads)

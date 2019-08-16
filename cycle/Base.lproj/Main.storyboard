@@ -125,6 +125,20 @@
                                                     <action selector="search:" destination="WXY-Yh-m6F" eventType="touchUpInside" id="pgo-GQ-Nab"/>
                                                 </connections>
                                             </button>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CCO-pF-zgj">
+                                                <rect key="frame" x="187" y="0.0" width="0.0" height="30"/>
+                                                <state key="normal" title="SOS"/>
+                                                <connections>
+                                                    <action selector="sos:" destination="WXY-Yh-m6F" eventType="touchUpInside" id="JT3-O3-BNq"/>
+                                                </connections>
+                                            </button>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dYO-Am-bHl">
+                                                <rect key="frame" x="187" y="0.0" width="0.0" height="30"/>
+                                                <state key="normal" title="Finish"/>
+                                                <connections>
+                                                    <action selector="finish:" destination="WXY-Yh-m6F" eventType="touchUpInside" id="Gy9-R7-IwJ"/>
+                                                </connections>
+                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R7G-wK-W5k">
                                                 <rect key="frame" x="230.5" y="0.0" width="143.5" height="30"/>
                                                 <state key="normal" title="Activity"/>
@@ -144,6 +158,14 @@
                                     <constraint firstItem="QnF-N9-cCo" firstAttribute="top" secondItem="kxs-bx-Bff" secondAttribute="top" id="oqc-bS-kEm"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fq6-Im-MOA">
+                                <rect key="frame" x="179" y="791" width="56" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Get Bug"/>
+                                <connections>
+                                    <action selector="getBug:" destination="WXY-Yh-m6F" eventType="touchUpInside" id="lwl-fd-s8p"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -159,9 +181,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="i0Q-yB-BkZ"/>
                     <connections>
+                        <outlet property="finishButton" destination="dYO-Am-bHl" id="SDU-Q4-c7T"/>
                         <outlet property="mapView" destination="uHu-lx-uhs" id="Gi8-kc-bMc"/>
+                        <outlet property="menuView" destination="kxs-bx-Bff" id="zlI-Cv-xUe"/>
                         <outlet property="searchActivity" destination="R7G-wK-W5k" id="TTS-za-epu"/>
                         <outlet property="searchRoute" destination="1vk-jz-7Sj" id="6Wt-WA-AeH"/>
+                        <outlet property="sosButton" destination="CCO-pF-zgj" id="3kc-jr-5J3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dbs-sI-YZy" userLabel="First Responder" sceneMemberID="firstResponder"/>

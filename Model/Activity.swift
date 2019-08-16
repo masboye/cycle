@@ -17,6 +17,7 @@ struct Activity{
     var routes:[CLLocationCoordinate2D] = []
     private var messageID = 0
     private var message:String
+    private var userID:String
     let ref: DatabaseReference?
     private var key: String
     
@@ -26,6 +27,7 @@ struct Activity{
         self.ref = nil
         self.key = key
         self.message = ""
+        self.userID = ""
         
     }
     
@@ -35,17 +37,19 @@ struct Activity{
         self.ref = nil
         self.key = ""
         self.message = ""
+        self.userID = ""
     }
     
     init?(snapshot: DataSnapshot) {
         
-        print(snapshot)
+        
         guard
             let value = snapshot.value as? [String: AnyObject],
             let activityID = value["activityID"] as? String,
             let routes = value["routes"] as? [String],
             let messageID = value["messageID"] as? Int?,
-            let message = value["message"] as? String
+            let message = value["message"] as? String,
+            let user = value["user"] as? String
             else {
                 return nil
             }
@@ -55,6 +59,7 @@ struct Activity{
         self.activityID = activityID
         self.message = message
         self.messageID = messageID ?? 0
+        self.userID = user
         
         var routesList :[CLLocationCoordinate2D] = []
         routes.forEach { (route) in
@@ -79,7 +84,8 @@ struct Activity{
             "activityID": activityID,
             "routes": routesList,
             "messageID": messageID,
-            "message": message
+            "message": message,
+            "user": userID
             
         ]
     }
