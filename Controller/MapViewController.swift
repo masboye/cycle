@@ -260,6 +260,18 @@ class MapViewController: UIViewController {
                     }
                 }
             }
+            
+            //monitor friends location
+            let user = User()
+            
+            user.searchActivity(activity: self.activityID ?? "") { (users) in
+                
+                for cyclist in users{
+                    print(cyclist.fullName)
+                }
+            }
+            
+            
         }
     }
     func showInputDialog() {
@@ -290,14 +302,16 @@ class MapViewController: UIViewController {
                 alert.addAction(UIAlertAction(title: "OK", style: .default))
                 self.present(alert, animated: true, completion: nil)
                 
-                //join the user in the activity
-                let user = User()
+            }
+            
+            //join the user in the activity
+            let user = User()
+            
+            user.searchUser(userID: self.userID!) { (users) in
                 
-                user.searchUser(userID: self.userID ?? "") { (users) in
+                for cyclist in users{
                     
-                    for cyclist in users{
-                        cyclist.ref?.updateChildValues(["activity" : self.activityID])
-                    }
+                    cyclist.ref?.updateChildValues(["activity" : self.activityID!,"point" : 0])
                 }
             }
             
@@ -326,6 +340,18 @@ class MapViewController: UIViewController {
             let alert = UIAlertController(title: "Start Activity",message: "Let's Go",preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default))
             self.present(alert, animated: true, completion: nil)
+            
+            //join the user in the activity
+            print("activityID = \(self.activityID!)")
+            let user = User()
+            
+            user.searchUser(userID: self.userID!) { (users) in
+                
+                for cyclist in users{
+                    
+                    cyclist.ref?.updateChildValues(["activity" : self.activityID!,"point" : 0])
+                }
+            }
             
             navigationItem.titleView = nil
             self.navigationItem.prompt = self.activityID
@@ -376,6 +402,7 @@ class MapViewController: UIViewController {
             notShowCycling(status: false)
             
             navigationItem.titleView = nil
+            
             
             backgroundOperation()
             guard let timer = self.timerForBackground else {return}
@@ -545,6 +572,7 @@ extension MapViewController:HandleActivitySearch{
             routesPoints.append(placemark)
             addPinInMap(placemark: placemark)
         }
+        self.activityID = activity.activityID
         drawRoutes()
     }
     

@@ -18,13 +18,14 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         let defaults = UserDefaults.standard
         let userID = defaults.string(forKey: "email")
-        
-        let user = User()
-        
-        user.searchUser(userID: userID ?? "") { (users) in
-            //already sign in
-            self.performSegue(withIdentifier: "showMap", sender: nil )
-        }
+        self.textBoxUserID.text = userID
+//
+//        let user = User()
+//        
+//        user.searchUser(userID: userID ?? "") { (users) in
+//            //already sign in
+//            self.performSegue(withIdentifier: "showMap", sender: nil )
+//        }
     }
 
     @IBAction func signIn(_ sender: UIButton) {

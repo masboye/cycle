@@ -20,6 +20,7 @@ struct User{
     var location:CLLocationCoordinate2D
     let ref: DatabaseReference?
     let key: String
+    var point = 0
     
     init(id: String,fullName:String,activity:String, location: CLLocationCoordinate2D, key: String = "") {
         self.activityID = activity
@@ -28,6 +29,7 @@ struct User{
         self.location = location
         self.ref = nil
         self.key = key
+        self.point = 0
     }
     
     init(){
@@ -37,6 +39,7 @@ struct User{
         self.location = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
         self.ref = nil
         self.key = ""
+        self.point = 0
     }
     
     init?(snapshot: DataSnapshot) {
@@ -46,7 +49,8 @@ struct User{
             let userID = value["userID"] as? String,
             let fullName = value["fullName"] as? String,
             let activityID = value["activity"] as? String,
-            let location = value["location"] as? String
+            let location = value["location"] as? String,
+            let point = value["point"] as? Int?
         
             else {
                 return nil
@@ -57,6 +61,7 @@ struct User{
         self.activityID = activityID
         self.userID = userID
         self.fullName = fullName
+        self.point = point ?? 0
         let locationDegrees = location.split(separator: ",")
         
         let userLocation = CLLocationCoordinate2D(latitude: CLLocationDegrees(locationDegrees[0]) as! CLLocationDegrees, longitude: CLLocationDegrees(locationDegrees[1]) as! CLLocationDegrees)
@@ -71,7 +76,8 @@ struct User{
             "userID": userID,
             "fullName": fullName,
             "activity": activityID,
-            "location": "\(location.latitude),\(location.longitude)"
+            "location": "\(location.latitude),\(location.longitude)",
+            "point" : point
             
         ]
     }
@@ -110,8 +116,27 @@ struct User{
             var userList:[User] = []
             for item in snapshot.children{
                 let user = item as! DataSnapshot
-                let cyclist = User(snapshot: user)
-                userList.append(cyclist!)
+                guard let cyclist = User(snapshot: user) else {return}
+                userList.append(cyclist)
+            }
+            
+            callback(userList)
+            
+            
+        })
+        
+    }
+    
+    func searchActivity(activity:String, callback: @escaping ([User]) -> Void){
+        
+        
+        User.dbRef.child("users").queryOrdered(byChild:  "activity").queryStarting(atValue: activity).queryEnding(atValue: activity + "\u{f8ff}").observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            var userList:[User] = []
+            for item in snapshot.children{
+                let user = item as! DataSnapshot
+                guard let cyclist = User(snapshot: user) else {return}
+                userList.append(cyclist)
             }
             
             callback(userList)

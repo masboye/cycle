@@ -37,7 +37,7 @@ class ShowRouteViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationItem.prompt = "Helping \(userNeedHelp.fullName)"
+        self.navigationItem.prompt = "Route to \(userNeedHelp.fullName)"
         
         guard let timer = self.timerForBackground else {return}
         backGroundOperation()
