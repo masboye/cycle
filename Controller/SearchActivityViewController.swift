@@ -60,7 +60,7 @@ extension SearchActivityViewController : UISearchResultsUpdating {
         
         let kegiatan = Activity()
         
-        kegiatan.searchActivity(activityID: searchBarText) { (activities) in
+        kegiatan.searchActivity(activityID: searchBarText.uppercased()) { (activities) in
             
             self.matchingItems = activities
             print("\(activities)-\(searchBarText)")

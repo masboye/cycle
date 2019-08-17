@@ -15,9 +15,9 @@ struct User{
     
     private static var dbRef: DatabaseReference = Database.database().reference()
     private var userID:String
-    private var fullName:String
+    var fullName:String
     var activityID:String
-    private var location:CLLocationCoordinate2D
+    var location:CLLocationCoordinate2D
     let ref: DatabaseReference?
     let key: String
     

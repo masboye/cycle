@@ -127,11 +127,9 @@ class MapViewController: UIViewController {
             
         }
         
-        //        //the cancel action doing nothing
-                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
         
-        
-                }
+        }
         
         //adding textfields to our dialog box
         alertController.addTextField { (textField) in
@@ -181,7 +179,7 @@ class MapViewController: UIViewController {
             altiMeter.startRelativeAltitudeUpdates(to: OperationQueue.current!) { (altiData, error) in
                 if let data = altiData{
                     
-                    self.altitudeLabel.text = Pretiffy.getAltitude(height: Double(data.relativeAltitude))
+                    self.altitudeLabel.text = Pretiffy.getAltitude(height: Double(truncating: data.relativeAltitude))
                     
                 }
             }
@@ -191,30 +189,57 @@ class MapViewController: UIViewController {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+       
+        guard let timer = self.timerForBackground else {return}
+        
+        timer.invalidate()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        guard let timer = self.timerForBackground else {return}
+        
+        backgroundOperation()
+        timer.fire()
+    }
+    
     func showSOSMessage(activity:Activity) {
         //Creating UIAlertController and
         //Setting title and message for the alert dialog
-        let info = "\(activity.userID) send message '\(activity.message)'"
-        let alertController = UIAlertController(title: "SOS", message: info, preferredStyle: .alert)
+        let user = User()
         
-        //the confirm action taking the inputs
-        let confirmAction = UIAlertAction(title: "Show Location", style: .default) { (_) in
+        user.searchUser(userID: activity.userID) { (users) in
             
+            let user = users.first
+            
+            let info = "\(user?.fullName ?? "a friend") sends a message '\(activity.message)'"
+            let alertController = UIAlertController(title: "SOS", message: info, preferredStyle: .alert)
+            
+            //the confirm action taking the inputs
+            let confirmAction = UIAlertAction(title: "Show Location", style: .default) { (_) in
+                
+                self.performSegue(withIdentifier: "showRoute", sender: activity )
+            }
+            
+            //        //the cancel action doing nothing
+            let cancelAction = UIAlertAction(title: "Acknowledge", style: .cancel) { (_) in
+                
+                self.messageID = activity.messageID
+                
+            }
+            
+            //adding the action to dialogbox
+            alertController.addAction(confirmAction)
+            alertController.addAction(cancelAction)
+            
+            //finally presenting the dialog box
+            self.present(alertController, animated: true, completion: nil)
         }
+        //
         
-        //        //the cancel action doing nothing
-        let cancelAction = UIAlertAction(title: "Acknowledge", style: .cancel) { (_) in
-            
-            self.messageID = activity.messageID
-            
-        }
-        
-        //adding the action to dialogbox
-        alertController.addAction(confirmAction)
-        alertController.addAction(cancelAction)
-        
-        //finally presenting the dialog box
-        self.present(alertController, animated: true, completion: nil)
     }
     
     
@@ -228,7 +253,7 @@ class MapViewController: UIViewController {
             kegiatan.searchActivity(activityID: self.activityID ?? "") { (activities) in
                 
                 for activity in activities{
-                    if activity.messageID != 0 && activity.messageID != self.messageID && self.userID != activity.userID {
+                    if  activity.messageID != self.messageID { //&& self.userID != activity.userID 
                         //new sos message
                         self.showSOSMessage(activity: activity)
                         
@@ -266,7 +291,7 @@ class MapViewController: UIViewController {
                 self.present(alert, animated: true, completion: nil)
                 
                 //join the user in the activity
-                var user = User()
+                let user = User()
                 
                 user.searchUser(userID: self.userID ?? "") { (users) in
                     
@@ -385,6 +410,16 @@ class MapViewController: UIViewController {
             let launchOptions = [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving]
             mapItem.openInMaps(launchOptions: launchOptions)
         }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //guard (sender as? URL) != nil else {return}
+        guard let result = sender as? Activity else {return}
+        
+        let controller = segue.destination
+        let showRoute = controller as! ShowRouteViewController
+        showRoute.messageID = self.messageID
+        showRoute.friend = result
     }
 }
 
@@ -528,7 +563,7 @@ extension MapViewController: MKMapViewDelegate{
     //MARK:- MapKit delegates
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay)
-        renderer.strokeColor = UIColor.blue
+        renderer.strokeColor = RandomHelper.generateRandomColor()
         renderer.lineWidth = 4.0
         
         return renderer
@@ -545,7 +580,8 @@ extension MapViewController: UIGestureRecognizerDelegate{
                 let locationCoordinate = mapView.convert(touchLocation,toCoordinateFrom: mapView)
                 //print("Tapped at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
                 let point = MKPlacemark(coordinate: locationCoordinate)
-                if let index = routesPoints.first(where: { $0.coordinate.latitude == point.coordinate.latitude && $0.coordinate.longitude == point.coordinate.longitude }){
+            
+                if routesPoints.first(where: { $0.coordinate.latitude == point.coordinate.latitude && $0.coordinate.longitude == point.coordinate.longitude }) != nil{
                    
                     return
                 }

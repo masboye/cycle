@@ -82,10 +82,6 @@ class ViewController: UIViewController {
     }
     @IBAction func login(_ sender: UIButton) {
         
-//        let defaults = UserDefaults.standard
-//        defaults.set("boye.setiawan@gmail.com", forKey: "email")
-//        self.performSegue(withIdentifier: "showMap", sender: nil )
-        
         Login.loginAccount(email: textBoxUserID.text!.trimmingCharacters(in: .whitespacesAndNewlines), password: textBoxPassword.text!.trimmingCharacters(in: .whitespacesAndNewlines)) { (info,result) in
 
             if result{

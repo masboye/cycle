@@ -12,6 +12,8 @@
 		EF82A13B23039EEC001939B7 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF82A13A23039EEC001939B7 /* Activity.swift */; };
 		EF83F76D2305465B0082CDB8 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF83F76C2305465B0082CDB8 /* MapViewController.swift */; };
 		EF83F76F2305525F0082CDB8 /* SearchRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF83F76E2305525F0082CDB8 /* SearchRouteViewController.swift */; };
+		EFCF441C2307C9DA00633371 /* ShowRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCF441B2307C9DA00633371 /* ShowRouteViewController.swift */; };
+		EFCF441E2307D7AE00633371 /* RandomHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCF441D2307D7AE00633371 /* RandomHelper.swift */; };
 		EFE0535523059F1C007DC359 /* SearchActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFE0535423059F1C007DC359 /* SearchActivityViewController.swift */; };
 		EFE11BF52304423600782142 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFE11BF42304423600782142 /* Login.swift */; };
 		EFEE5DD52301575B0027F401 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEE5DD42301575B0027F401 /* AppDelegate.swift */; };
@@ -32,6 +34,8 @@
 		EF82A13A23039EEC001939B7 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		EF83F76C2305465B0082CDB8 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		EF83F76E2305525F0082CDB8 /* SearchRouteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRouteViewController.swift; sourceTree = "<group>"; };
+		EFCF441B2307C9DA00633371 /* ShowRouteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowRouteViewController.swift; sourceTree = "<group>"; };
+		EFCF441D2307D7AE00633371 /* RandomHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomHelper.swift; sourceTree = "<group>"; };
 		EFE0535423059F1C007DC359 /* SearchActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchActivityViewController.swift; sourceTree = "<group>"; };
 		EFE11BF42304423600782142 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		EFEE5DD12301575B0027F401 /* cycle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cycle.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				EF6864BE230664B300B039FA /* PretiffyDistance.swift */,
+				EFCF441D2307D7AE00633371 /* RandomHelper.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -99,6 +104,7 @@
 				EF83F76C2305465B0082CDB8 /* MapViewController.swift */,
 				EF83F76E2305525F0082CDB8 /* SearchRouteViewController.swift */,
 				EFE0535423059F1C007DC359 /* SearchActivityViewController.swift */,
+				EFCF441B2307C9DA00633371 /* ShowRouteViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -262,12 +268,14 @@
 				EF83F76F2305525F0082CDB8 /* SearchRouteViewController.swift in Sources */,
 				EFF5FE322303FA9500F42319 /* User.swift in Sources */,
 				EF83F76D2305465B0082CDB8 /* MapViewController.swift in Sources */,
+				EFCF441E2307D7AE00633371 /* RandomHelper.swift in Sources */,
 				EFE0535523059F1C007DC359 /* SearchActivityViewController.swift in Sources */,
 				EFE11BF52304423600782142 /* Login.swift in Sources */,
 				EF6864BF230664B300B039FA /* PretiffyDistance.swift in Sources */,
 				EFEE5DD72301575B0027F401 /* ViewController.swift in Sources */,
 				EFEE5DD52301575B0027F401 /* AppDelegate.swift in Sources */,
 				EF82A13B23039EEC001939B7 /* Activity.swift in Sources */,
+				EFCF441C2307C9DA00633371 /* ShowRouteViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
