@@ -36,6 +36,7 @@ class MapViewController: UIViewController {
     
     var friends: [Cyclist] = []
     var distanceFromDestination = 0.0
+    var timeFromDestination = 0
     
     func notShowMenu(status:Bool){
         self.searchRoute.isHidden = status
@@ -568,6 +569,7 @@ extension MapViewController: HandleMapSearch {
     func drawRoutes(routes:[MKPlacemark],draw:Bool = true) {
         
         self.distanceFromDestination = 0.0
+        self.timeFromDestination = 0
         let sourcePlaceMark = MKPlacemark(coordinate: initialLocation)
         
         for point in routes{
@@ -577,7 +579,7 @@ extension MapViewController: HandleMapSearch {
 
             directionRequest.source = source
             directionRequest.destination = MKMapItem(placemark: point)
-            directionRequest.transportType = .walking
+            directionRequest.transportType = .any
 
             let directions = MKDirections(request: directionRequest)
             
@@ -591,12 +593,15 @@ extension MapViewController: HandleMapSearch {
 
             //get route and assign to our route variable
             let route = directionResonse.routes[0]
-
+                
                 //test
                 self.distanceFromDestination += route.distance
-                print("distance = \(self.distanceFromDestination)")
+                self.timeFromDestination += Int (route.expectedTravelTime)
+                //print("distance = \(self.distanceFromDestination)")
+                print("eta = \(route.expectedTravelTime)")
                 DispatchQueue.main.async(execute: {
                     self.distanceLabel.text = "\(Pretiffy.getDistance(distance: self.distanceFromDestination))"
+                    self.etaLabel.text = "\(Pretiffy.getETA(seconds: self.timeFromDestination))"
                 })
                 //end
 

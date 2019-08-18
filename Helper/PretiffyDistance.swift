@@ -32,9 +32,7 @@ struct Pretiffy {
     static func getSpeed(speed:Double) -> String {
         
         let lengthFormatter = LengthFormatter()
-//        lengthFormatter.numberFormatter.roundingMode = .ceiling
-//        lengthFormatter.numberFormatter.maximumFractionDigits = 2
-//        
+   
         if speed < 0{
             return "0"
         }
@@ -44,4 +42,18 @@ struct Pretiffy {
         return "\(lengthFormatter.string(fromValue:calculatedSpeed, unit: .kilometer))/hour"
        
     }
+    
+    static func getETA(seconds:Int) -> String {
+        
+        if seconds < 0{
+            return "0"
+        }
+        
+        let h = seconds / 3600
+        let m = (seconds % 3600) / 60
+        let s = (seconds % 3600) % 60
+        return h > 0 ? String(format: "%1d:%02d:%02d", h, m, s) : String(format: "%1d:%02d", m, s)
+        
+    }
+    
 }
