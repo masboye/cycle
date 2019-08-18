@@ -37,6 +37,8 @@ class MapViewController: UIViewController {
     var friends: [Cyclist] = []
     var distanceFromDestination = 0.0
     var timeFromDestination = 0
+    var friendsDistance:[String:Double] = [:]
+    
     
     func notShowMenu(status:Bool){
         self.searchRoute.isHidden = status
@@ -318,6 +320,15 @@ class MapViewController: UIViewController {
                  self.mapView.removeOverlays(self.mapView.overlays)
                 self.drawRoutes(routes: checkDistance, draw: true)
                 
+                //MARK:- calculating friends distance to destination
+                for friend in  self.friends{
+                    user.searchUser(userID: friend.userID, callback: { (users) in
+                        self.friendsDistance[users.first!.userID] = users.first!.distance
+                    })
+                }
+                
+                print(self.friendsDistance)
+                
             })
            
             
@@ -598,9 +609,16 @@ extension MapViewController: HandleMapSearch {
                 self.distanceFromDestination += route.distance
                 self.timeFromDestination += Int (route.expectedTravelTime)
                 //print("distance = \(self.distanceFromDestination)")
-                print("eta = \(route.expectedTravelTime)")
+                //print("eta = \(route.expectedTravelTime)")
                 DispatchQueue.main.async(execute: {
                     self.distanceLabel.text = "\(Pretiffy.getDistance(distance: self.distanceFromDestination))"
+                    
+                    let user = User()
+                    
+                    user.searchUser(userID: self.userID!) { (users) in
+                        users.first?.ref?.updateChildValues(["distance": self.distanceFromDestination])
+                    }
+                    
                     self.etaLabel.text = "\(Pretiffy.getETA(seconds: self.timeFromDestination))"
                 })
                 //end

@@ -21,6 +21,7 @@ struct User{
     let ref: DatabaseReference?
     let key: String
     var point = 0
+    var distance = 0.0
     
     init(id: String,fullName:String,activity:String, location: CLLocationCoordinate2D, key: String = "") {
         self.activityID = activity
@@ -30,6 +31,7 @@ struct User{
         self.ref = nil
         self.key = key
         self.point = 0
+        self.distance = 0.0
     }
     
     init(){
@@ -40,6 +42,7 @@ struct User{
         self.ref = nil
         self.key = ""
         self.point = 0
+        self.distance = 0.0
     }
     
     init?(snapshot: DataSnapshot) {
@@ -50,7 +53,8 @@ struct User{
             let fullName = value["fullName"] as? String,
             let activityID = value["activity"] as? String,
             let location = value["location"] as? String,
-            let point = value["point"] as? Int?
+            let point = value["point"] as? Int?,
+            let distance = value["distance"] as? Double?
         
             else {
                 return nil
@@ -62,6 +66,7 @@ struct User{
         self.userID = userID
         self.fullName = fullName
         self.point = point ?? 0
+        self.distance = distance ?? 0.0
         let locationDegrees = location.split(separator: ",")
         
         let userLocation = CLLocationCoordinate2D(latitude: CLLocationDegrees(locationDegrees[0]) as! CLLocationDegrees, longitude: CLLocationDegrees(locationDegrees[1]) as! CLLocationDegrees)
@@ -77,7 +82,8 @@ struct User{
             "fullName": fullName,
             "activity": activityID,
             "location": "\(location.latitude),\(location.longitude)",
-            "point" : point
+            "point" : point,
+            "distance" : distance
             
         ]
     }
