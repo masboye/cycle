@@ -14,7 +14,7 @@ import Firebase
 struct User{
     
     private static var dbRef: DatabaseReference = Database.database().reference()
-    private var userID:String
+    var userID:String
     var fullName:String
     var activityID:String
     var location:CLLocationCoordinate2D

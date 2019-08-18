@@ -23,15 +23,19 @@ class MapViewController: UIViewController {
     var userID:String?
     var activityID:String?
     var isActivityOwner = false
-    var distanceFromDestination = 0.0
     var messageID = 0
     
     let altiMeter = CMAltimeter()
     private var timerForBackground:Timer?
    
+    @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var viewInfo: UIView!
     @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var altitudeLabel: UILabel!
+    @IBOutlet weak var etaLabel: UILabel!
+    
+    var friends: [Cyclist] = []
+    var distanceFromDestination = 0.0
     
     func notShowMenu(status:Bool){
         self.searchRoute.isHidden = status
@@ -186,6 +190,8 @@ class MapViewController: UIViewController {
             
         }
         
+        self.mapView.register(CyclistView.self,
+                         forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         
     }
     
@@ -242,7 +248,7 @@ class MapViewController: UIViewController {
         
     }
     
-    
+     //MARK:- backGround
     func backgroundOperation(){
         
         //background operation
@@ -261,16 +267,58 @@ class MapViewController: UIViewController {
                 }
             }
             
-            //monitor friends location
+             //MARK:- Real Time Location
+            //send treal time location
             let user = User()
             
-            user.searchActivity(activity: self.activityID ?? "") { (users) in
-                
-                for cyclist in users{
-                    print(cyclist.fullName)
-                }
-            }
+            user.searchUser(userID: self.userID!, callback: { (users) in
+                //cyclist.ref?.updateChildValues(["activity" : self.activityID!,"point" : 0])
+                //"\(location.latitude),\(location.longitude)"
+                users.first?.ref?.updateChildValues(["location":"\(self.initialLocation.latitude),\(self.initialLocation.longitude)"])
+            })
             
+             //MARK:- Get Friends Location
+            self.mapView.removeAnnotations(self.friends)
+            self.friends = []
+            
+            user.searchActivity(activity: self.activityID ?? "", callback: { (users) in
+                for cyclist in users{
+                    
+                    if cyclist.userID != self.userID{
+                        self.friends.append(Cyclist(user: cyclist)!)
+                    }
+                    
+                }
+                
+                self.mapView.addAnnotations(self.friends)
+                
+                 //MARK:- Detect distance between check point in route
+                
+                var point = 0
+                for (index, element) in self.routesPoints.enumerated() {
+                    
+                    guard let distance = element.location?.distance(from: CLLocation(latitude: self.initialLocation.latitude, longitude: self.initialLocation.longitude)) else {
+                        return
+                    }
+                    
+                    if distance < 50 {
+                        point = index
+                    }
+                }
+                
+                user.searchUser(userID: self.userID!) { (users) in
+                    users.first?.ref?.updateChildValues(["point": point])
+                }
+                
+                //MARK:- calculating distance to destination
+                let checkPointPassed = self.routesPoints[point...]
+                //nedd to do this because the array slice cannot automatically converted
+                let checkDistance = Array(checkPointPassed)
+                 self.mapView.removeOverlays(self.mapView.overlays)
+                self.drawRoutes(routes: checkDistance, draw: true)
+                
+            })
+           
             
         }
     }
@@ -342,7 +390,6 @@ class MapViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
             
             //join the user in the activity
-            print("activityID = \(self.activityID!)")
             let user = User()
             
             user.searchUser(userID: self.userID!) { (users) in
@@ -497,8 +544,8 @@ extension MapViewController: HandleMapSearch {
         let annotation = MKPointAnnotation()
         annotation.coordinate = placemark.coordinate
         annotation.title = placemark.name
-        if let city = placemark.locality,
-            let state = placemark.administrativeArea {
+        if let _ = placemark.locality,
+            let _ = placemark.administrativeArea {
             annotation.subtitle = "(city) (state)"
         }
         mapView.addAnnotation(annotation)
@@ -515,23 +562,25 @@ extension MapViewController: HandleMapSearch {
         mapView.setRegion(region, animated: true)
         
         self.routesPoints.append(placemark)
-        drawRoutes()
+        drawRoutes(routes: self.routesPoints)
     }
     
-    func drawRoutes(){
+    func drawRoutes(routes:[MKPlacemark],draw:Bool = true) {
         
+        self.distanceFromDestination = 0.0
         let sourcePlaceMark = MKPlacemark(coordinate: initialLocation)
         
-        let directionRequest = MKDirections.Request()
-        var source = MKMapItem(placemark: sourcePlaceMark)
-        
-        for point in routesPoints{
-            
+        for point in routes{
+
+            let directionRequest = MKDirections.Request()
+            var source = MKMapItem(placemark: sourcePlaceMark)
+
             directionRequest.source = source
             directionRequest.destination = MKMapItem(placemark: point)
             directionRequest.transportType = .walking
-            
+
             let directions = MKDirections(request: directionRequest)
+            
             directions.calculate { (response, error) in
             guard let directionResonse = response else {
                 if let error = error {
@@ -539,26 +588,33 @@ extension MapViewController: HandleMapSearch {
                     }
                     return
                 }
-            
+
             //get route and assign to our route variable
             let route = directionResonse.routes[0]
-                
+
                 //test
-                print("route.distance = \(Pretiffy.getDistance(distance: route.distance))")
+                self.distanceFromDestination += route.distance
+                print("distance = \(self.distanceFromDestination)")
+                DispatchQueue.main.async(execute: {
+                    self.distanceLabel.text = "\(Pretiffy.getDistance(distance: self.distanceFromDestination))"
+                })
                 //end
-            
-            //add rout to our mapview
-            self.mapView.addOverlay(route.polyline, level: .aboveRoads)
-            
-            //setting rect of our mapview to fit the two locations
-            let rect = route.polyline.boundingMapRect
-            self.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+
+                if draw{
+
+                    //add rout to our mapview
+                    self.mapView.addOverlay(route.polyline, level: .aboveRoads)
+
+                    //setting rect of our mapview to fit the two locations
+                    let rect = route.polyline.boundingMapRect
+                    self.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+
+                }
             }
-            
+
             source = MKMapItem(placemark: point)
             
         }
-        
 
     }
 }
@@ -573,7 +629,7 @@ extension MapViewController:HandleActivitySearch{
             addPinInMap(placemark: placemark)
         }
         self.activityID = activity.activityID
-        drawRoutes()
+        drawRoutes(routes: self.routesPoints)
     }
     
     func cancelActivity() {
@@ -597,6 +653,14 @@ extension MapViewController: MKMapViewDelegate{
         return renderer
     }
     
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
+                 calloutAccessoryControlTapped control: UIControl) {
+        let location = view.annotation as! Cyclist
+        //let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+        //location.mapItem().openInMaps(launchOptions: launchOptions)
+        print(location)
+        
+    }
 }
 
 extension MapViewController: UIGestureRecognizerDelegate{
@@ -616,7 +680,7 @@ extension MapViewController: UIGestureRecognizerDelegate{
                 //print("ADD")
                 addPinInMap(placemark: point)
                 self.routesPoints.append(point)
-                drawRoutes()
+                drawRoutes(routes: self.routesPoints)
                
                 return
             
