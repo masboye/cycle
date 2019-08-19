@@ -38,7 +38,7 @@ class MapViewController: UIViewController {
     var distanceFromDestination = 0.0
     var timeFromDestination = 0
     var friendsDistance:[String:Double] = [:]
-    
+    var groups:[[String:Double]] = []
     
     func notShowMenu(status:Bool){
         self.searchRoute.isHidden = status
@@ -262,7 +262,7 @@ class MapViewController: UIViewController {
             kegiatan.searchActivity(activityID: self.activityID ?? "") { (activities) in
                 
                 for activity in activities{
-                    if  activity.messageID != self.messageID { //&& self.userID != activity.userID 
+                    if  activity.messageID != self.messageID && self.userID != activity.userID  { //
                         //new sos message
                         self.showSOSMessage(activity: activity)
                         
@@ -275,8 +275,6 @@ class MapViewController: UIViewController {
             let user = User()
             
             user.searchUser(userID: self.userID!, callback: { (users) in
-                //cyclist.ref?.updateChildValues(["activity" : self.activityID!,"point" : 0])
-                //"\(location.latitude),\(location.longitude)"
                 users.first?.ref?.updateChildValues(["location":"\(self.initialLocation.latitude),\(self.initialLocation.longitude)"])
             })
             
@@ -293,7 +291,6 @@ class MapViewController: UIViewController {
                     
                 }
                 
-                self.mapView.addAnnotations(self.friends)
                 
                  //MARK:- Detect distance between check point in route
                 
@@ -327,10 +324,49 @@ class MapViewController: UIViewController {
                     })
                 }
                 
-                print(self.friendsDistance)
+                //MARK:- Grouping all cyclists
                 
+               self.groups = []
+                
+                repeat {
+                    
+                    let sortedByValueDictionary = self.friendsDistance.sorted { $0.1 < $1.1 }
+                    guard let initialDistance = sortedByValueDictionary.first?.value else { return }
+                    
+                    let filteredDict = self.friendsDistance.filter{
+                        Int(($0.value - initialDistance)) < (50 )
+                    }
+                    
+                    if filteredDict.count > 0{
+                        
+                        self.groups.append(filteredDict)
+                        //print(filteredDict)
+                        for cyclist in filteredDict{
+                            self.friendsDistance.removeValue(forKey: cyclist.key)
+                        }
+                        
+                    }
+                    
+                    
+                }while self.friendsDistance.count > 0
+
+                //print(self.groups)
+                
+                self.friends = []
+
+                for frontCyclist in self.groups{
+                    print(frontCyclist)
+                    user.searchUser(userID: frontCyclist.first!.key, callback: { (users) in
+                        //self.friends.append(Cyclist(user: users.first!)!)
+                        self.friends.append(Cyclist(fullname: "Group of \(frontCyclist.count ) friends", userID: users.first!.userID, discipline: "Flag", coordinate: users.first!.location))
+                        self.mapView.addAnnotations(self.friends)
+                    })
+                }
+                
+
+                //self.mapView.addAnnotations(self.friends)
+
             })
-           
             
         }
     }
