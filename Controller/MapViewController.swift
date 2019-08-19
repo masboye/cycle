@@ -651,7 +651,9 @@ extension MapViewController:HandleActivitySearch{
             routesPoints.append(placemark)
             addPinInMap(placemark: placemark)
         }
+        
         self.activityID = activity.activityID
+        print("This is as drop \(self.activityID )")
         drawRoutes(routes: self.routesPoints)
     }
     

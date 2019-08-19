@@ -60,6 +60,8 @@ class ViewController: UIViewController {
             user.insertData { (info) in
                 print(info)
             }
+            let defaults = UserDefaults.standard
+            defaults.set(self.textBoxUserID.text!.trimmingCharacters(in: .whitespacesAndNewlines), forKey: "email")
             self.performSegue(withIdentifier: "showMap", sender: nil )
         }
         
