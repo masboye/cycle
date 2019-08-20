@@ -308,7 +308,7 @@ class MapViewController: UIViewController {
                     
                 }
                 
-                print("friends \(self.friends)")
+                //print("friends \(self.friends)")
                  //MARK:- Detect distance between check point in route
                 
                 var point = 0
