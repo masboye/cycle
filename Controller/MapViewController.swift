@@ -34,13 +34,15 @@ class MapViewController: UIViewController {
     @IBOutlet weak var altitudeLabel: UILabel!
     @IBOutlet weak var etaLabel: UILabel!
     @IBOutlet weak var viewCyclist: UIView!
-    @IBOutlet weak var collectionView: UICollectionView!
+    
+    @IBOutlet weak var tableView: UITableView!
     
     var friends: [Cyclist] = []
     var distanceFromDestination = 0.0
     var timeFromDestination = 0
     var friendsDistance:[String:Double] = [:]
     var groups:[[String:Double]] = []
+    var sortedFriendsByDistance:[User] = []
     
     func notShowMenu(status:Bool){
         self.searchRoute.isHidden = status
@@ -292,18 +294,21 @@ class MapViewController: UIViewController {
             
              //MARK:- Get Friends Location
             self.mapView.removeAnnotations(self.friends)
-            self.friends = []
+            
+            self.sortedFriendsByDistance = []
             
             user.searchActivity(activity: self.activityID ?? "", callback: { (users) in
+                
+                self.friends = []
                 for cyclist in users{
-                    
+                   
                     if cyclist.userID != self.userID{
                         self.friends.append(Cyclist(user: cyclist)!)
                     }
                     
                 }
                 
-                
+                print("friends \(self.friends)")
                  //MARK:- Detect distance between check point in route
                 
                 var point = 0
@@ -318,15 +323,23 @@ class MapViewController: UIViewController {
                     }
                 }
                 
+                var you:User!
+               
                 user.searchUser(userID: self.userID!) { (users) in
                     users.first?.ref?.updateChildValues(["point": point])
+                    you = users.first!
+                    you.fullName = "You"
+                    self.sortedFriendsByDistance.append(you)
+                    //just in case there are no more friends afterwards
+                    self.tableView.reloadData()
+                    
                 }
                 
                 //MARK:- calculating distance to destination
                 let checkPointPassed = self.routesPoints[point...]
                 //nedd to do this because the array slice cannot automatically converted
                 let checkDistance = Array(checkPointPassed)
-                 self.mapView.removeOverlays(self.mapView.overlays)
+                self.mapView.removeOverlays(self.mapView.overlays)
                 self.drawRoutes(routes: checkDistance, draw: true)
                 
                 //MARK:- calculating friends distance to destination
@@ -340,8 +353,10 @@ class MapViewController: UIViewController {
                 
                self.groups = []
                 
-                repeat {
-                    
+                print("friends distance \(self.friendsDistance)")
+                
+                while self.friendsDistance.count > 0 {
+                   
                     let sortedByValueDictionary = self.friendsDistance.sorted { $0.1 < $1.1 }
                     guard let initialDistance = sortedByValueDictionary.first?.value else { return }
                     
@@ -352,7 +367,7 @@ class MapViewController: UIViewController {
                     if filteredDict.count > 0{
                         
                         self.groups.append(filteredDict)
-                        //print(filteredDict)
+                      
                         for cyclist in filteredDict{
                             self.friendsDistance.removeValue(forKey: cyclist.key)
                         }
@@ -360,25 +375,43 @@ class MapViewController: UIViewController {
                     }
                     
                     
-                }while self.friendsDistance.count > 0
-
-                //print(self.groups)
+                }
                 
                 self.friends = []
-
+                
                 for frontCyclist in self.groups{
-                    //print(frontCyclist)
+                   
                     user.searchUser(userID: frontCyclist.first!.key, callback: { (users) in
-                        //self.friends.append(Cyclist(user: users.first!)!)
-                        self.friends.append(Cyclist(fullname: "Group of \(frontCyclist.count ) friends", userID: users.first!.userID, discipline: "Flag", coordinate: users.first!.location))
+                        
+                        var info = ""
+                        var detail = ""
+                        var user = users.first!
+                        
+                        if frontCyclist.count > 1 {
+                            info = "Group of \(frontCyclist.count ) friends"
+                            detail = "\(users.first!.fullName) is in group"
+                            user.fullName = info
+                            
+                        }else{
+                            info = users.first?.fullName ?? ""
+                            detail = users.first?.userID ?? ""
+                        }
+                        self.friends.append(Cyclist(fullname: info, userID: detail, discipline: "Flag", coordinate: users.first!.location))
                         
                         self.mapView.addAnnotations(self.friends)
-                        self.collectionView.reloadData()
+                        
+                        self.sortedFriendsByDistance.append(user)
+                        
+                        self.sortedFriendsByDistance = self.sortedFriendsByDistance.sorted(by: { (user1:User, user2:User) -> Bool in
+                            return user1.distance < user2.distance
+                        })
+                        
+                        self.tableView.reloadData()
                     })
                 }
                 
-
-                //self.mapView.addAnnotations(self.friends)
+                self.tableView.reloadData()
+                
 
             })
             
@@ -632,11 +665,12 @@ extension MapViewController: HandleMapSearch {
         self.distanceFromDestination = 0.0
         self.timeFromDestination = 0
         let sourcePlaceMark = MKPlacemark(coordinate: initialLocation)
+        var source = MKMapItem(placemark: sourcePlaceMark)
         
         for point in routes{
 
             let directionRequest = MKDirections.Request()
-            var source = MKMapItem(placemark: sourcePlaceMark)
+            
 
             directionRequest.source = source
             directionRequest.destination = MKMapItem(placemark: point)
@@ -655,11 +689,10 @@ extension MapViewController: HandleMapSearch {
             //get route and assign to our route variable
             let route = directionResonse.routes[0]
                 
-                //test
+                
                 self.distanceFromDestination += route.distance
                 self.timeFromDestination += Int (route.expectedTravelTime)
-                //print("distance = \(self.distanceFromDestination)")
-                //print("eta = \(route.expectedTravelTime)")
+               
                 DispatchQueue.main.async(execute: {
                     self.distanceLabel.text = "\(Pretiffy.getDistance(distance: self.distanceFromDestination))"
                     
@@ -671,7 +704,7 @@ extension MapViewController: HandleMapSearch {
                     
                     self.etaLabel.text = "\(Pretiffy.getETA(seconds: self.timeFromDestination))"
                 })
-                //end
+                
 
                 if draw{
 
@@ -767,21 +800,26 @@ extension MapViewController: UIGestureRecognizerDelegate{
         }
     }
 }
-    
 
-extension MapViewController: UICollectionViewDataSource{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.friends.count
+
+extension MapViewController: UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.sortedFriendsByDistance.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionViewCell", for: indexPath) as! CollectionViewCell
-
-        let cyclist = self.friends[indexPath.row]
-
-        cell.displayContent(title: cyclist.title!)
-        return cell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
+        if self.sortedFriendsByDistance.count < 1{
+            cell.textLabel?.text = ""
+            cell.detailTextLabel?.text = ""
+            
+        }else{
+            cell.textLabel?.text = self.sortedFriendsByDistance[indexPath.row].fullName
+            cell.detailTextLabel?.text = "\(self.sortedFriendsByDistance[indexPath.row].userID) distance \(Pretiffy.getDistance(distance: self.sortedFriendsByDistance[indexPath.row].distance))"
+            
+        }
+        return cell
     }
     
     
