@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		8A6AA7ABD33538A8EC47165E /* Pods_cycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E458B9B1D0ACB1505025E4C /* Pods_cycle.framework */; };
+		EF2B16EC230BB13000EBF33B /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF2B16EA230BB13000EBF33B /* Interface.storyboard */; };
+		EF2B16EE230BB13100EBF33B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF2B16ED230BB13100EBF33B /* Assets.xcassets */; };
+		EF2B16F5230BB13100EBF33B /* gogoApps Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = EF2B16F4230BB13100EBF33B /* gogoApps Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		EF2B16FA230BB13100EBF33B /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2B16F9230BB13100EBF33B /* InterfaceController.swift */; };
+		EF2B16FC230BB13100EBF33B /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2B16FB230BB13100EBF33B /* ExtensionDelegate.swift */; };
+		EF2B16FE230BB13100EBF33B /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2B16FD230BB13100EBF33B /* NotificationController.swift */; };
+		EF2B1700230BB13200EBF33B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF2B16FF230BB13200EBF33B /* Assets.xcassets */; };
+		EF2B1705230BB13200EBF33B /* gogoApps.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = EF2B16E8230BB13000EBF33B /* gogoApps.app */; };
 		EF6864BF230664B300B039FA /* PretiffyDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6864BE230664B300B039FA /* PretiffyDistance.swift */; };
 		EF82A13B23039EEC001939B7 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF82A13A23039EEC001939B7 /* Activity.swift */; };
 		EF83F76D2305465B0082CDB8 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF83F76C2305465B0082CDB8 /* MapViewController.swift */; };
@@ -27,11 +35,64 @@
 		EFF5FE322303FA9500F42319 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF5FE312303FA9500F42319 /* User.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		EF2B16F6230BB13100EBF33B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EFEE5DC92301575B0027F401 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EF2B16F3230BB13100EBF33B;
+			remoteInfo = "gogoApps Extension";
+		};
+		EF2B1703230BB13200EBF33B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EFEE5DC92301575B0027F401 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EF2B16E7230BB13000EBF33B;
+			remoteInfo = gogoApps;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EF2B1709230BB13200EBF33B /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				EF2B16F5230BB13100EBF33B /* gogoApps Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EF2B170D230BB13200EBF33B /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				EF2B1705230BB13200EBF33B /* gogoApps.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		2E458B9B1D0ACB1505025E4C /* Pods_cycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_cycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		64D32B79D8172905F0E2D7C7 /* Pods-cycle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cycle.debug.xcconfig"; path = "Target Support Files/Pods-cycle/Pods-cycle.debug.xcconfig"; sourceTree = "<group>"; };
 		704073F0987A14519897C3E8 /* Pods-cycle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cycle.release.xcconfig"; path = "Target Support Files/Pods-cycle/Pods-cycle.release.xcconfig"; sourceTree = "<group>"; };
 		EF1EC614230255810011EA59 /* cycle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = cycle.entitlements; sourceTree = "<group>"; };
+		EF2B16E8230BB13000EBF33B /* gogoApps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gogoApps.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF2B16EB230BB13000EBF33B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		EF2B16ED230BB13100EBF33B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EF2B16EF230BB13100EBF33B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EF2B16F4230BB13100EBF33B /* gogoApps Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "gogoApps Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF2B16F9230BB13100EBF33B /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		EF2B16FB230BB13100EBF33B /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		EF2B16FD230BB13100EBF33B /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		EF2B16FF230BB13200EBF33B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EF2B1701230BB13200EBF33B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EF2B1702230BB13200EBF33B /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		EF6864BE230664B300B039FA /* PretiffyDistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PretiffyDistance.swift; sourceTree = "<group>"; };
 		EF82A13A23039EEC001939B7 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		EF83F76C2305465B0082CDB8 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -54,6 +115,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		EF2B16F1230BB13100EBF33B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EFEE5DCE2301575B0027F401 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -80,6 +148,29 @@
 				704073F0987A14519897C3E8 /* Pods-cycle.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		EF2B16E9230BB13000EBF33B /* gogoApps */ = {
+			isa = PBXGroup;
+			children = (
+				EF2B16EA230BB13000EBF33B /* Interface.storyboard */,
+				EF2B16ED230BB13100EBF33B /* Assets.xcassets */,
+				EF2B16EF230BB13100EBF33B /* Info.plist */,
+			);
+			path = gogoApps;
+			sourceTree = "<group>";
+		};
+		EF2B16F8230BB13100EBF33B /* gogoApps Extension */ = {
+			isa = PBXGroup;
+			children = (
+				EF2B16F9230BB13100EBF33B /* InterfaceController.swift */,
+				EF2B16FB230BB13100EBF33B /* ExtensionDelegate.swift */,
+				EF2B16FD230BB13100EBF33B /* NotificationController.swift */,
+				EF2B16FF230BB13200EBF33B /* Assets.xcassets */,
+				EF2B1701230BB13200EBF33B /* Info.plist */,
+				EF2B1702230BB13200EBF33B /* PushNotificationPayload.apns */,
+			);
+			path = "gogoApps Extension";
 			sourceTree = "<group>";
 		};
 		EF6864BD2306649E00B039FA /* Helper */ = {
@@ -122,6 +213,8 @@
 				EF83F76B230546370082CDB8 /* Controller */,
 				EF82A13723039C4E001939B7 /* Model */,
 				EFEE5DD32301575B0027F401 /* cycle */,
+				EF2B16E9230BB13000EBF33B /* gogoApps */,
+				EF2B16F8230BB13100EBF33B /* gogoApps Extension */,
 				EFEE5DD22301575B0027F401 /* Products */,
 				9A1A0F3A43432EC568E83499 /* Pods */,
 				6BF146F74B034CBBD1B54B5E /* Frameworks */,
@@ -132,6 +225,8 @@
 			isa = PBXGroup;
 			children = (
 				EFEE5DD12301575B0027F401 /* cycle.app */,
+				EF2B16E8230BB13000EBF33B /* gogoApps.app */,
+				EF2B16F4230BB13100EBF33B /* gogoApps Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -153,6 +248,40 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		EF2B16E7230BB13000EBF33B /* gogoApps */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EF2B170A230BB13200EBF33B /* Build configuration list for PBXNativeTarget "gogoApps" */;
+			buildPhases = (
+				EF2B16E6230BB13000EBF33B /* Resources */,
+				EF2B1709230BB13200EBF33B /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EF2B16F7230BB13100EBF33B /* PBXTargetDependency */,
+			);
+			name = gogoApps;
+			productName = gogoApps;
+			productReference = EF2B16E8230BB13000EBF33B /* gogoApps.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		EF2B16F3230BB13100EBF33B /* gogoApps Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EF2B1706230BB13200EBF33B /* Build configuration list for PBXNativeTarget "gogoApps Extension" */;
+			buildPhases = (
+				EF2B16F0230BB13100EBF33B /* Sources */,
+				EF2B16F1230BB13100EBF33B /* Frameworks */,
+				EF2B16F2230BB13100EBF33B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "gogoApps Extension";
+			productName = "gogoApps Extension";
+			productReference = EF2B16F4230BB13100EBF33B /* gogoApps Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
 		EFEE5DD02301575B0027F401 /* cycle */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EFEE5DE32301575C0027F401 /* Build configuration list for PBXNativeTarget "cycle" */;
@@ -162,10 +291,12 @@
 				EFEE5DCE2301575B0027F401 /* Frameworks */,
 				EFEE5DCF2301575B0027F401 /* Resources */,
 				F393E7B44D629FD7EA074151 /* [CP] Embed Pods Frameworks */,
+				EF2B170D230BB13200EBF33B /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				EF2B1704230BB13200EBF33B /* PBXTargetDependency */,
 			);
 			name = cycle;
 			productName = cycle;
@@ -182,6 +313,12 @@
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "boy setiawan";
 				TargetAttributes = {
+					EF2B16E7230BB13000EBF33B = {
+						CreatedOnToolsVersion = 10.2;
+					};
+					EF2B16F3230BB13100EBF33B = {
+						CreatedOnToolsVersion = 10.2;
+					};
 					EFEE5DD02301575B0027F401 = {
 						CreatedOnToolsVersion = 10.2;
 						SystemCapabilities = {
@@ -206,11 +343,30 @@
 			projectRoot = "";
 			targets = (
 				EFEE5DD02301575B0027F401 /* cycle */,
+				EF2B16E7230BB13000EBF33B /* gogoApps */,
+				EF2B16F3230BB13100EBF33B /* gogoApps Extension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		EF2B16E6230BB13000EBF33B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF2B16EE230BB13100EBF33B /* Assets.xcassets in Resources */,
+				EF2B16EC230BB13000EBF33B /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EF2B16F2230BB13100EBF33B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF2B1700230BB13200EBF33B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EFEE5DCF2301575B0027F401 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -267,6 +423,16 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		EF2B16F0230BB13100EBF33B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF2B16FE230BB13100EBF33B /* NotificationController.swift in Sources */,
+				EF2B16FC230BB13100EBF33B /* ExtensionDelegate.swift in Sources */,
+				EF2B16FA230BB13100EBF33B /* InterfaceController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EFEE5DCD2301575B0027F401 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -289,7 +455,28 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		EF2B16F7230BB13100EBF33B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EF2B16F3230BB13100EBF33B /* gogoApps Extension */;
+			targetProxy = EF2B16F6230BB13100EBF33B /* PBXContainerItemProxy */;
+		};
+		EF2B1704230BB13200EBF33B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EF2B16E7230BB13000EBF33B /* gogoApps */;
+			targetProxy = EF2B1703230BB13200EBF33B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
+		EF2B16EA230BB13000EBF33B /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EF2B16EB230BB13000EBF33B /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
 		EFEE5DD82301575B0027F401 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -309,6 +496,86 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		EF2B1707230BB13200EBF33B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "gogoApps Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = id.go.kemlu.cycle.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 5.2;
+			};
+			name = Debug;
+		};
+		EF2B1708230BB13200EBF33B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "gogoApps Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = id.go.kemlu.cycle.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 5.2;
+			};
+			name = Release;
+		};
+		EF2B170B230BB13200EBF33B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NP7PUX36AY;
+				IBSC_MODULE = gogoApps_Extension;
+				INFOPLIST_FILE = gogoApps/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = id.go.kemlu.cycle.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 5.2;
+			};
+			name = Debug;
+		};
+		EF2B170C230BB13200EBF33B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NP7PUX36AY;
+				IBSC_MODULE = gogoApps_Extension;
+				INFOPLIST_FILE = gogoApps/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = id.go.kemlu.cycle.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 5.2;
+			};
+			name = Release;
+		};
 		EFEE5DE12301575C0027F401 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -468,6 +735,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		EF2B1706230BB13200EBF33B /* Build configuration list for PBXNativeTarget "gogoApps Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EF2B1707230BB13200EBF33B /* Debug */,
+				EF2B1708230BB13200EBF33B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EF2B170A230BB13200EBF33B /* Build configuration list for PBXNativeTarget "gogoApps" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EF2B170B230BB13200EBF33B /* Debug */,
+				EF2B170C230BB13200EBF33B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EFEE5DCC2301575B0027F401 /* Build configuration list for PBXProject "cycle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
