@@ -33,6 +33,8 @@ class MapViewController: UIViewController {
     @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var altitudeLabel: UILabel!
     @IBOutlet weak var etaLabel: UILabel!
+    @IBOutlet weak var viewCyclist: UIView!
+    @IBOutlet weak var collectionView: UICollectionView!
     
     var friends: [Cyclist] = []
     var distanceFromDestination = 0.0
@@ -43,6 +45,7 @@ class MapViewController: UIViewController {
     func notShowMenu(status:Bool){
         self.searchRoute.isHidden = status
         self.searchActivity.isHidden = status
+        
         
     }
     
@@ -151,7 +154,7 @@ class MapViewController: UIViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
-    @IBOutlet weak var menuWhenCycling: UIView!
+    //@IBOutlet weak var menuWhenCycling: UIView!
     @IBOutlet weak var searchActivity: UIButton!
     @IBOutlet weak var searchRoute: UIButton!
     @IBOutlet weak var mapView: MKMapView!
@@ -196,6 +199,15 @@ class MapViewController: UIViewController {
         self.mapView.register(CyclistView.self,
                          forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         
+        let mapTapGesture = UITapGestureRecognizer(target: self, action: #selector(self.mapTap(_:)))
+        self.mapView.addGestureRecognizer(mapTapGesture)
+    }
+    
+    @objc func mapTap( _ recognizer : UITapGestureRecognizer){
+        
+        if !self.sosButton.isHidden{
+            self.viewCyclist.isHidden = !self.viewCyclist.isHidden
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -355,11 +367,13 @@ class MapViewController: UIViewController {
                 self.friends = []
 
                 for frontCyclist in self.groups{
-                    print(frontCyclist)
+                    //print(frontCyclist)
                     user.searchUser(userID: frontCyclist.first!.key, callback: { (users) in
                         //self.friends.append(Cyclist(user: users.first!)!)
                         self.friends.append(Cyclist(fullname: "Group of \(frontCyclist.count ) friends", userID: users.first!.userID, discipline: "Flag", coordinate: users.first!.location))
+                        
                         self.mapView.addAnnotations(self.friends)
+                        self.collectionView.reloadData()
                     })
                 }
                 
@@ -755,3 +769,20 @@ extension MapViewController: UIGestureRecognizerDelegate{
 }
     
 
+extension MapViewController: UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.friends.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionViewCell", for: indexPath) as! CollectionViewCell
+
+        let cyclist = self.friends[indexPath.row]
+
+        cell.displayContent(title: cyclist.title!)
+        return cell
+        
+    }
+    
+    
+}
